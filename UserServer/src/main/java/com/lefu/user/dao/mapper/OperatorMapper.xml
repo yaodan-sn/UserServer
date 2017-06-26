@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lefu.user.dao.OperatorMapper">
+  <resultMap id="BaseResultMap" type="com.lefu.user.entity.Operator">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="optimistic" jdbcType="INTEGER" property="optimistic" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="owner_no" jdbcType="VARCHAR" property="ownerNo" />
+    <result column="owner_type" jdbcType="VARCHAR" property="ownerType" />
+    <result column="operator_type" jdbcType="VARCHAR" property="operatorType" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="max_error_times" jdbcType="INTEGER" property="maxErrorTimes" />
+    <result column="last_login_err_time" jdbcType="TIMESTAMP" property="lastLoginErrTime" />
+    <result column="modify_passwd_cycle" jdbcType="INTEGER" property="modifyPasswdCycle" />
+    <result column="passwd_modify_time" jdbcType="TIMESTAMP" property="passwdModifyTime" />
+    <result column="allow_begin_time" jdbcType="VARCHAR" property="allowBeginTime" />
+    <result column="allow_end_time" jdbcType="VARCHAR" property="allowEndTime" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="create_operator" jdbcType="VARCHAR" property="createOperator" />
+    <result column="relogin_flag" jdbcType="VARCHAR" property="reloginFlag" />
+    <result column="passwd_effect_time" jdbcType="TIMESTAMP" property="passwdEffectTime" />
+    <result column="passwd_expire_time" jdbcType="TIMESTAMP" property="passwdExpireTime" />
+    <result column="try_times" jdbcType="INTEGER" property="tryTimes" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="public_password" jdbcType="VARCHAR" property="publicPassword" />
+    <result column="is_send" jdbcType="VARCHAR" property="isSend" />
+    <result column="last_send_time" jdbcType="TIMESTAMP" property="lastSendTime" />
+    <result column="phone_pwd" jdbcType="VARCHAR" property="phonePwd" />
+    <result column="reserved_info" jdbcType="VARCHAR" property="reservedInfo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, optimistic, username, owner_no, owner_type, operator_type, password, status, 
+    max_error_times, last_login_err_time, modify_passwd_cycle, passwd_modify_time, allow_begin_time, 
+    allow_end_time, realname, create_operator, relogin_flag, passwd_effect_time, passwd_expire_time, 
+    try_times, org_code, public_password, is_send, last_send_time, phone_pwd, reserved_info, 
+    create_time, last_update_time
+  </sql>
+  
+  <select id="selectByOperator" resultMap="BaseResultMap"
+		parameterType="com.lefu.user.entity.Operator" resultType="List">
+		select
+		<include refid="Base_Column_List" /> 
+		 from operator
+		<where>
+			<if test="username != null">
+				and username=#{username}
+			</if>
+			<if test="ownerNo != null">
+				and owner_no=#{ownerNo}
+			</if>
+			<if test="status != null">
+				and status=#{status}
+			</if>
+		</where>
+	</select>
+	
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from operator
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from operator
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lefu.user.entity.Operator">
+    insert into operator (id, optimistic, username, 
+      owner_no, owner_type, operator_type, 
+      password, status, max_error_times, 
+      last_login_err_time, modify_passwd_cycle, 
+      passwd_modify_time, allow_begin_time, allow_end_time, 
+      realname, create_operator, relogin_flag, 
+      passwd_effect_time, passwd_expire_time, 
+      try_times, org_code, public_password, 
+      is_send, last_send_time, phone_pwd, 
+      reserved_info, create_time, last_update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{optimistic,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{ownerNo,jdbcType=VARCHAR}, #{ownerType,jdbcType=VARCHAR}, #{operatorType,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{maxErrorTimes,jdbcType=INTEGER}, 
+      #{lastLoginErrTime,jdbcType=TIMESTAMP}, #{modifyPasswdCycle,jdbcType=INTEGER}, 
+      #{passwdModifyTime,jdbcType=TIMESTAMP}, #{allowBeginTime,jdbcType=VARCHAR}, #{allowEndTime,jdbcType=VARCHAR}, 
+      #{realname,jdbcType=VARCHAR}, #{createOperator,jdbcType=VARCHAR}, #{reloginFlag,jdbcType=VARCHAR}, 
+      #{passwdEffectTime,jdbcType=TIMESTAMP}, #{passwdExpireTime,jdbcType=TIMESTAMP}, 
+      #{tryTimes,jdbcType=INTEGER}, #{orgCode,jdbcType=VARCHAR}, #{publicPassword,jdbcType=VARCHAR}, 
+      #{isSend,jdbcType=VARCHAR}, #{lastSendTime,jdbcType=TIMESTAMP}, #{phonePwd,jdbcType=VARCHAR}, 
+      #{reservedInfo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lefu.user.entity.Operator">
+    insert into operator
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="optimistic != null">
+        optimistic,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="ownerNo != null">
+        owner_no,
+      </if>
+      <if test="ownerType != null">
+        owner_type,
+      </if>
+      <if test="operatorType != null">
+        operator_type,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="maxErrorTimes != null">
+        max_error_times,
+      </if>
+      <if test="lastLoginErrTime != null">
+        last_login_err_time,
+      </if>
+      <if test="modifyPasswdCycle != null">
+        modify_passwd_cycle,
+      </if>
+      <if test="passwdModifyTime != null">
+        passwd_modify_time,
+      </if>
+      <if test="allowBeginTime != null">
+        allow_begin_time,
+      </if>
+      <if test="allowEndTime != null">
+        allow_end_time,
+      </if>
+      <if test="realname != null">
+        realname,
+      </if>
+      <if test="createOperator != null">
+        create_operator,
+      </if>
+      <if test="reloginFlag != null">
+        relogin_flag,
+      </if>
+      <if test="passwdEffectTime != null">
+        passwd_effect_time,
+      </if>
+      <if test="passwdExpireTime != null">
+        passwd_expire_time,
+      </if>
+      <if test="tryTimes != null">
+        try_times,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="publicPassword != null">
+        public_password,
+      </if>
+      <if test="isSend != null">
+        is_send,
+      </if>
+      <if test="lastSendTime != null">
+        last_send_time,
+      </if>
+      <if test="phonePwd != null">
+        phone_pwd,
+      </if>
+      <if test="reservedInfo != null">
+        reserved_info,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="optimistic != null">
+        #{optimistic,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerNo != null">
+        #{ownerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerType != null">
+        #{ownerType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null">
+        #{operatorType,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="maxErrorTimes != null">
+        #{maxErrorTimes,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginErrTime != null">
+        #{lastLoginErrTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyPasswdCycle != null">
+        #{modifyPasswdCycle,jdbcType=INTEGER},
+      </if>
+      <if test="passwdModifyTime != null">
+        #{passwdModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="allowBeginTime != null">
+        #{allowBeginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="allowEndTime != null">
+        #{allowEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="createOperator != null">
+        #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="reloginFlag != null">
+        #{reloginFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="passwdEffectTime != null">
+        #{passwdEffectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="passwdExpireTime != null">
+        #{passwdExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tryTimes != null">
+        #{tryTimes,jdbcType=INTEGER},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="publicPassword != null">
+        #{publicPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="isSend != null">
+        #{isSend,jdbcType=VARCHAR},
+      </if>
+      <if test="lastSendTime != null">
+        #{lastSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phonePwd != null">
+        #{phonePwd,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedInfo != null">
+        #{reservedInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lefu.user.entity.Operator">
+    update operator
+    <set>
+      <if test="optimistic != null">
+        optimistic = #{optimistic,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerNo != null">
+        owner_no = #{ownerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerType != null">
+        owner_type = #{ownerType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null">
+        operator_type = #{operatorType,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="maxErrorTimes != null">
+        max_error_times = #{maxErrorTimes,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginErrTime != null">
+        last_login_err_time = #{lastLoginErrTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyPasswdCycle != null">
+        modify_passwd_cycle = #{modifyPasswdCycle,jdbcType=INTEGER},
+      </if>
+      <if test="passwdModifyTime != null">
+        passwd_modify_time = #{passwdModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="allowBeginTime != null">
+        allow_begin_time = #{allowBeginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="allowEndTime != null">
+        allow_end_time = #{allowEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="createOperator != null">
+        create_operator = #{createOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="reloginFlag != null">
+        relogin_flag = #{reloginFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="passwdEffectTime != null">
+        passwd_effect_time = #{passwdEffectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="passwdExpireTime != null">
+        passwd_expire_time = #{passwdExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tryTimes != null">
+        try_times = #{tryTimes,jdbcType=INTEGER},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="publicPassword != null">
+        public_password = #{publicPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="isSend != null">
+        is_send = #{isSend,jdbcType=VARCHAR},
+      </if>
+      <if test="lastSendTime != null">
+        last_send_time = #{lastSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phonePwd != null">
+        phone_pwd = #{phonePwd,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedInfo != null">
+        reserved_info = #{reservedInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lefu.user.entity.Operator">
+    update operator
+    set optimistic = #{optimistic,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      owner_no = #{ownerNo,jdbcType=VARCHAR},
+      owner_type = #{ownerType,jdbcType=VARCHAR},
+      operator_type = #{operatorType,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      max_error_times = #{maxErrorTimes,jdbcType=INTEGER},
+      last_login_err_time = #{lastLoginErrTime,jdbcType=TIMESTAMP},
+      modify_passwd_cycle = #{modifyPasswdCycle,jdbcType=INTEGER},
+      passwd_modify_time = #{passwdModifyTime,jdbcType=TIMESTAMP},
+      allow_begin_time = #{allowBeginTime,jdbcType=VARCHAR},
+      allow_end_time = #{allowEndTime,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      create_operator = #{createOperator,jdbcType=VARCHAR},
+      relogin_flag = #{reloginFlag,jdbcType=VARCHAR},
+      passwd_effect_time = #{passwdEffectTime,jdbcType=TIMESTAMP},
+      passwd_expire_time = #{passwdExpireTime,jdbcType=TIMESTAMP},
+      try_times = #{tryTimes,jdbcType=INTEGER},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      public_password = #{publicPassword,jdbcType=VARCHAR},
+      is_send = #{isSend,jdbcType=VARCHAR},
+      last_send_time = #{lastSendTime,jdbcType=TIMESTAMP},
+      phone_pwd = #{phonePwd,jdbcType=VARCHAR},
+      reserved_info = #{reservedInfo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
