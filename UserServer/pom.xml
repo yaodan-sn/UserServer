@@ -8,7 +8,7 @@
 	<packaging>war</packaging>
 
 	<name>UserServer</name>
-
+	<url></url>
 	<properties>
 		<jdk.version>1.8</jdk.version>
 		<druid.version>1.0.31</druid.version>
