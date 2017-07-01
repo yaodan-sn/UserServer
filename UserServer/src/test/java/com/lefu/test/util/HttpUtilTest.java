@@ -1,4 +1,4 @@
-package com.lefu.test.user;
+package com.lefu.test.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
-import com.lefu.user.util.HttpUtil;
+import com.lefu.util.HttpUtil;
 
 public class HttpUtilTest {
 

@@ -12,7 +12,7 @@ import com.lefu.user.bean.KongOauth2AuthorizeBean;
 import com.lefu.user.bean.KongOauth2TokenParamBean;
 import com.lefu.user.bean.TokenBean;
 import com.lefu.user.service.KongService;
-import com.lefu.user.util.HttpUtil;
+import com.lefu.util.HttpUtil;
 
 public class KongServiceTest extends WebAppContextSetupTest {
 

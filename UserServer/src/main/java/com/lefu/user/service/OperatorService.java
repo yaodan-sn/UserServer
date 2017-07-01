@@ -27,8 +27,8 @@ import com.lefu.user.constant.StringConstant;
 import com.lefu.user.dao.OperatorMapper;
 import com.lefu.user.entity.Operator;
 import com.lefu.user.exception.UserServiceException;
-import com.lefu.user.util.RandomUtils;
-import com.lefu.user.util.RedisUtils;
+import com.lefu.util.RandomUtils;
+import com.lefu.util.RedisUtils;
 
 @Service
 public class OperatorService extends BaseService {

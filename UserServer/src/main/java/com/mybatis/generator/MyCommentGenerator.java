@@ -1,4 +1,4 @@
-package org.mybatis.generator;
+package com.mybatis.generator;
 
 /**
  * Created by 草帽boy on 2017/2/16.

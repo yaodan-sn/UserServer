@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <configuration debug="false">
+
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />
+	<contextName>${bySecond}</contextName>
+
 	<property name="LOG_HOME" value="${catalina.home}/logs/" />
 	<property name="LOG_FILENAME" value="userserver" />
 

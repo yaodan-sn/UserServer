@@ -19,9 +19,9 @@
         <meta name="keywords" content="html5, css3, form, switch, animation, :target, pseudo-class" />
         <meta name="author" content="Codrops" />
         <link rel="shortcut icon" href="../favicon.ico"> 
-        <link rel="stylesheet" type="text/css" href="${ctx}/css/demo.css" />
-        <link rel="stylesheet" type="text/css" href="${ctx}/css/style.css" />
-		<link rel="stylesheet" type="text/css" href="${ctx}/css/animate-custom.css" />
+        <link rel="stylesheet" type="text/css" href="${ctx}/static/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="${ctx}/static/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="${ctx}/static/css/animate-custom.css" />
     </head>
 	<body>
         <div class="container">
@@ -113,8 +113,8 @@
             </section>
         </div>
     </body>
-    <script type="text/javascript" src="${ctx}/js/jquery/jquery-1.8.0.js"></script>
-    <script type="text/javascript" src="${ctx}/js/common/ajax.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/jquery/jquery-1.8.0.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/common/ajax.js"></script>
     <script type="text/javascript">
     
     var clientId = "fe5ef422cff64a088982c53e6a2e9c45";

@@ -1,4 +1,4 @@
-package org.mybatis.generator;
+package com.mybatis.generator;
 
 /**
  * Created by 草帽boy on 2017/2/16.
@@ -23,8 +23,10 @@ public class StartUp {
         try {
             List<String> warnings = new ArrayList<String>();
             boolean overwrite = true;
-            //直接获取generatorConfig.xml的文件路径 根据具体情况查看
-            File configFile = new File("D:/workspace-luna/UserServer/src/main/resources/generatorConfig.xml");
+            File configFile = new File(StartUp.class.getResource("")
+                    .getPath().split("com")[0]+"generatorConfig.xml");
+            
+            System.out.println(configFile.getAbsolutePath());
             ConfigurationParser cp = new ConfigurationParser(warnings);
             Configuration config = cp.parseConfiguration(configFile);
             DefaultShellCallback callback = new DefaultShellCallback(overwrite);

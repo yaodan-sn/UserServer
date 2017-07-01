@@ -13,17 +13,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.lefu.user.config.RootConfig;
-import com.lefu.user.config.WebConfig;
+import com.lefu.config.RootConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration(value = "src/main/webapp")
-@ContextHierarchy({ @ContextConfiguration(name = "parent", classes = RootConfig.class),
-		@ContextConfiguration(name = "child", classes = WebConfig.class) })
+@ContextHierarchy({ @ContextConfiguration(name = "parent", classes = RootConfig.class) })
 public class WebAppContextSetupTest {
-	
+
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	@Autowired
 	private WebApplicationContext wac;
 	protected MockMvc mockMvc;
