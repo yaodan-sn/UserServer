@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service;
  * 基于数据库表的业务主键自增生成器
  * 必要配置:
  * dataSource数据源
- * incrementerTableName 表名称 eg:seq_config
- * incrementerColumnName 自增业务主键存放的字段名   eg: code
+ * incrementerTableName 表名称 eg:incrementer.table.name=seq_config
+ * incrementerColumnName 自增业务主键存放的字段名   eg: incrementer.column.name=code
  * cacheSize 默认1000
  * 
  * table eg:
