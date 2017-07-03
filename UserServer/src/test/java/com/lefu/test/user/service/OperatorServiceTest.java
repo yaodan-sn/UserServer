@@ -18,7 +18,7 @@ import com.lefu.user.service.OperatorService;
 public class OperatorServiceTest extends WebAppContextSetupTest {
 	@Resource
 	private OperatorService operatorService;
-
+	
 	@Test
 	public void testLogin() {
 		OperatorBean operator = new OperatorBean();
@@ -45,16 +45,21 @@ public class OperatorServiceTest extends WebAppContextSetupTest {
 
 	@Test
 	public void testVerifyCode() {
-		operatorService.verifyCode("18301311234");
+		operatorService.verifyCode("18301311235");
 	}
 
 	@Test
 	public void testSaveUserRegister() {
 		OperatorBean operatorBean = new OperatorBean();
-		operatorBean.setUsername("18301311234");
+		operatorBean.setUsername("18301311237");
 		operatorBean.setPassword("123456");
-		operatorBean.setVerifyCode("905182");
+		operatorBean.setVerifyCode("552489");
 
 		operatorService.saveUserRegister(operatorBean);
+	}
+	
+	@Test
+	public void testNextId() throws InterruptedException{
+		operatorService.nextId();
 	}
 }

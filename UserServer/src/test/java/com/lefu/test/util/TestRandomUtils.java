@@ -12,9 +12,7 @@ public class TestRandomUtils {
 
 	@Test
 	public void testRandom6bit() {
-		for (int i = 0; i < 100; i++) {
-			logger.info(":{}", RandomUtils.getRandom6bit());
-		}
+		logger.info(":{}", RandomUtils.getRandom6bit());
 	}
 
 }

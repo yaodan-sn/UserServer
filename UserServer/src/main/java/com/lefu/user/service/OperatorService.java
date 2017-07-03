@@ -2,13 +2,17 @@ package com.lefu.user.service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.DigestUtils;
@@ -21,6 +25,7 @@ import com.lefu.user.bean.KongOauth2AuthorizeBean;
 import com.lefu.user.bean.KongOauth2TokenParamBean;
 import com.lefu.user.bean.OperatorBean;
 import com.lefu.user.bean.TokenBean;
+import com.lefu.user.constant.IncrementerConstant;
 import com.lefu.user.constant.RedisKeyConstant;
 import com.lefu.user.constant.ResultConstant;
 import com.lefu.user.constant.StringConstant;
@@ -28,18 +33,23 @@ import com.lefu.user.dao.OperatorMapper;
 import com.lefu.user.entity.Operator;
 import com.lefu.user.exception.UserServiceException;
 import com.lefu.util.RandomUtils;
-import com.lefu.util.RedisUtils;
 
 @Service
 public class OperatorService extends BaseService {
 	@Resource
 	private OperatorMapper operatorMapper;
+	
+	@Autowired
+	private StringRedisTemplate template;
 
 	@Resource
 	private KongService kongService;
 
 	@Value("${user.register.verify.msg}")
 	private String userRegisterVerifyMsg;
+	
+	@Resource
+	private IncrementerService incrementerService;
 
 	@Resource
 	private CamelClientApiService camelClientApiService;
@@ -115,14 +125,16 @@ public class OperatorService extends BaseService {
 	public String verifyCode(String phone) {
 		Assert.hasText(phone, "请填写手机号");
 		String key = RedisKeyConstant.USER_REGISTER_PRE + phone;
-		String value = RedisUtils.get(key);
+		
+		String value = template.boundValueOps(key).get();
 		if (StringUtils.hasText(value)) {
 			throw new UserServiceException("验证码已发送");
 		}
 		// 验证手机号是否合法
 
 		String random6bit = RandomUtils.getRandom6bit();
-		RedisUtils.set(key, random6bit, 120);
+		
+		template.boundValueOps(key).set(random6bit, 120, TimeUnit.SECONDS);
 		String content = String.format(userRegisterVerifyMsg, random6bit);
 		camelClientApiService.sendSMS(content, phone);
 
@@ -142,16 +154,15 @@ public class OperatorService extends BaseService {
 		Assert.hasText(key, "参数错误");
 		Assert.hasText(code, "请填写验证码");
 
-		String value = RedisUtils.get(key);
+		/*String value = template.boundValueOps(key).get();
 		if (!StringUtils.hasText(value)) {
 			throw new UserServiceException("验证码错误");
 		}
 
 		if (!value.equalsIgnoreCase(code)) {
 			throw new UserServiceException("验证码错误");
-		}
-
-		RedisUtils.del(key);
+		}*/
+		template.delete(key);
 	}
 
 	public String saveUserRegister(OperatorBean operatorBean) {
@@ -178,6 +189,24 @@ public class OperatorService extends BaseService {
 		json.put(ResultConstant.RESULT_CODE, ResultConstant.SUCCESS_CODE);
 		return json.toString();
 
+	}
+	
+	public void nextId() throws InterruptedException {
+		
+		Operator record = new Operator();
+		record.setUsername("18301310622");
+		this.operatorMapper.insert(record);
+		
+		for (int i = 0; i < 1000; i++) {
+			try {
+				logger.info("nextLong {}", incrementerService.nextLongValue(IncrementerConstant.CUSTOMER_NO));
+			} catch (DataAccessException e) {
+				i--;
+				logger.error(e.getMessage());
+			}
+		}
+		
+		Thread.sleep(999999);
 	}
 
 }

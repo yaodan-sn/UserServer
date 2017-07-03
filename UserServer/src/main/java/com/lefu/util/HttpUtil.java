@@ -154,12 +154,13 @@ public class HttpUtil {
 					list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 				}
 			}
+			
 			try {
 				requestBuilder.setUri(new URI(url));
 			} catch (URISyntaxException e) {
 				throw new HttpException(e.getMessage(), e);
 			}
-
+			
 			try {
 				requestBuilder.setEntity(new UrlEncodedFormEntity(list, UTF_8));
 			} catch (UnsupportedEncodingException e) {

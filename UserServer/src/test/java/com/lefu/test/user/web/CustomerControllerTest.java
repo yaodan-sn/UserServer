@@ -18,7 +18,7 @@ public class CustomerControllerTest extends WebAppContextSetupTest {
 		// .andExpect(MockMvcResultMatchers.view().name("customer/view"))
 		// .andExpect(MockMvcResultMatchers.model().attributeExists("customer"))
 				.andDo(MockMvcResultHandlers.print()).andReturn();
-//		Assert.assertNotNull(result.getModelAndView().getModel().get("customer"));
+		Assert.assertNotNull(result.getModelAndView().getModel().get("customer"));
 	}
 
 	@Test

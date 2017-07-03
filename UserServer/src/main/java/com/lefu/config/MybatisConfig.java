@@ -19,7 +19,8 @@ public class MybatisConfig {
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 		org.springframework.core.io.Resource[] resources = resolver
-				.getResources("classpath:com/lefu/**/dao/**/*.xml");
+				.getResources("classpath*:com/lefu/**/dao/**/*.xml");
+		
 		sqlSessionFactoryBean.setMapperLocations(resources);
 		return sqlSessionFactoryBean.getObject();
 	}
