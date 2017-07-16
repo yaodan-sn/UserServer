@@ -37,7 +37,7 @@ public class DataSourceConfig {
 	@Value("${db.max.active}")
 	private int dbMaxActive;
 	
-	@Value("${db.filters}")
+	@Value("${db.filters:}")
 	private String dbFilters;
 	
 	@Value("${db.publickey}")
@@ -52,7 +52,7 @@ public class DataSourceConfig {
 		ds.setPassword(dbPassword);
 		ds.setMaxActive(dbMaxActive);
 		ds.setFilters(dbFilters);
-		ds.setConnectionProperties("config.decrypt=true;config.decrypt.key=" + dbPublickey);
+//		ds.setConnectionProperties("config.decrypt=true;config.decrypt.key=" + dbPublickey);
 		return ds;
 	}
 

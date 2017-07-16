@@ -8,7 +8,7 @@ import com.lefu.user.bean.OperatorBean;
 import com.lefu.user.bean.TokenBean;
 import com.lefu.user.service.OperatorService;
 
-@Service(version = "1.0.0", group = "user", registry = { "zyt", "lefu" })
+@Service(version = "1.0.0", group = "user", registry = { "lefu" })
 public class OperatorInterfaceImpl implements OperatorInterface {
 
 	@Resource

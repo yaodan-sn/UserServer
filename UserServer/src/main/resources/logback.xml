@@ -9,7 +9,7 @@
 		</encoder>
 	</appender>
 
-	<appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<!-- <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_HOME}/${LOG_FILENAME}.info.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${LOG_HOME}/${LOG_FILENAME}.info-%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -64,11 +64,9 @@
 
 	<logger name="com.alibaba.dubbo" level="error" additivity="false">
 		<appender-ref ref="infoAppender" />
-	</logger>
+	</logger> -->
 
-	<root level="DEBUG">
-		<appender-ref ref="errorAppender" />
-		<appender-ref ref="infoAppender" />
+	<root level="INFO">
 		<appender-ref ref="CONSOLE" />
 	</root>
 </configuration>

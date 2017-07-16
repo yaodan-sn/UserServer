@@ -96,4 +96,5 @@ public class RedisConfig {
 		stringRedisTemplate.setConnectionFactory(connectionFactory);
 		return stringRedisTemplate;
 	}
+
 }

@@ -20,7 +20,7 @@ public class IncrementerServiceTest extends WebAppContextSetupTest {
 	@Test
 	public void testNextLongValue() throws InterruptedException, IOException {
 		long start = System.currentTimeMillis();
-		CountDownLatch countDownLatch = new CountDownLatch(100);
+		CountDownLatch countDownLatch = new CountDownLatch(10);
 		for (int i = 0; i < 10; i++) {
 			new Thread(new NextLongValue()).start();
 		}

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.lefu</groupId>
-	<artifactId>UserServer</artifactId>
+	<artifactId>userserver</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
 
@@ -303,6 +303,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<finalName>UserServer</finalName>
+		<finalName>userserver</finalName>
 	</build>
 </project>

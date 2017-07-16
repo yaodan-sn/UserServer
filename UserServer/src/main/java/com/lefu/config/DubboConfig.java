@@ -3,6 +3,7 @@ package com.lefu.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,7 @@ import com.alibaba.dubbo.config.spring.AnnotationBean;
 
 @Configuration
 @PropertySource("classpath:dubbo.properties")
+@ImportResource("classpath:dubbo-consumer.xml")
 public class DubboConfig {
 
 	@Value("${dubbo.application.name}")
@@ -34,9 +36,9 @@ public class DubboConfig {
 	@Value("${lefu.dubbo.regAddress}")
 	private String lefuRegAddress;// dubbo注册地址
 
-	@Value("${zyt.dubbo.regAddress}")
+	/*@Value("${zyt.dubbo.regAddress}")
 	private String zytRegAddress;// dubbo注册地址
-
+*/
 	@Value("${dubbo.protocol.name}")
 	private String protocolName;// dubbo使用协议
 
@@ -62,10 +64,9 @@ public class DubboConfig {
 	 * @return
 	 */
 	@Bean
-	public static AnnotationBean annotationBean(
-			@Value("${dubbo.annotation.package}") String packageName) {
+	public static AnnotationBean annotationBean(@Value("${dubbo.annotation.package}") String packageName) {
 		AnnotationBean annotationBean = new AnnotationBean();
-		annotationBean.setPackage("com.lefu.**.dubbo");
+		annotationBean.setPackage(packageName);
 		return annotationBean;
 	}
 
@@ -91,14 +92,14 @@ public class DubboConfig {
 		return registry;
 	}
 
-	@Bean(name = "zyt")
+	/*@Bean(name = "zyt")
 	public RegistryConfig zytRegConfig() {
 		// 连接注册中心配置
 		RegistryConfig registry = new RegistryConfig(zytRegAddress);
 		registry.setId("zyt");
 		registry.setDefault(false);
 		return registry;
-	}
+	}*/
 
 	/**
 	 * 默认基于dubbo协议提供服务
