@@ -1,70 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true" scanPeriod="3 seconds" packagingData="true">
+	<!-- <property resource="resource1.properties" /> -->
+	<contextName>${CONTEXT_NAME}</contextName>
 	<property name="LOG_HOME" value="${catalina.home}/logs" />
 	<property name="LOG_FILENAME" value="userserver" />
 
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<!-- <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_HOME}/${LOG_FILENAME}.info.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_HOME}/${LOG_FILENAME}.info-%d{yyyy-MM-dd}.log</fileNamePattern>
-			<maxHistory>15</maxHistory>
-		</rollingPolicy>
-		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-		</encoder>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>INFO</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
-		</filter>
-	</appender>
-
-	<appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_HOME}/${LOG_FILENAME}.error.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_HOME}/${LOG_FILENAME}.error-%d{yyyy-MM-dd}.log
-			</fileNamePattern>
-			<maxHistory>15</maxHistory>
-		</rollingPolicy>
-		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-		</encoder>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>ERROR</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
-		</filter>
-	</appender>
-
-	<appender name="file-monitor" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>INFO</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
-		</filter>
-		<file>${LOG_HOME}/monitor.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_HOME}/monitor.%d{yyyy-MM-dd}.log</FileNamePattern>
-			<maxHistory>15</maxHistory>
-		</rollingPolicy>
-		<encoder>
-			<pattern>%msg%n</pattern>
-		</encoder>
-	</appender>
-
-	<logger name="monitor" additivity="false">
-		<appender-ref ref="file-monitor" />
+	<logger name="com.logback" level="INFO" additivity="false">
+		<appender-ref ref="CONSOLE" />
 	</logger>
+	<logger name="com.logback.HelloWorld2" level="WARN" />
 
-	<logger name="com.alibaba.dubbo" level="error" additivity="false">
-		<appender-ref ref="infoAppender" />
-	</logger> -->
+	<logger name="com.alibaba.dubbo" level="warn" additivity="false">
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="org.apache.zookeeper" level="warn" additivity="false">
+		<appender-ref ref="CONSOLE" />
+	</logger>
 
 	<root level="INFO">
 		<appender-ref ref="CONSOLE" />

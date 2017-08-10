@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import com.lefu.user.bean.KongOauth2TokenParamBean;
 import com.lefu.user.bean.OperatorBean;
 import com.lefu.user.bean.TokenBean;
 import com.lefu.user.constant.IncrementerConstant;
+import com.lefu.user.constant.RedisCacheConstant;
 import com.lefu.user.constant.RedisKeyConstant;
 import com.lefu.user.constant.ResultConstant;
 import com.lefu.user.constant.StringConstant;
@@ -38,7 +40,7 @@ import com.lefu.util.RandomUtils;
 public class OperatorService extends BaseService {
 	@Resource
 	private OperatorMapper operatorMapper;
-	
+
 	@Autowired
 	private StringRedisTemplate template;
 
@@ -47,13 +49,14 @@ public class OperatorService extends BaseService {
 
 	@Value("${user.register.verify.msg}")
 	private String userRegisterVerifyMsg;
-	
+
 	@Resource
 	private IncrementerService incrementerService;
 
 	@Resource
 	private CamelClientApiService camelClientApiService;
 
+	@Cacheable(cacheNames = { RedisCacheConstant.OPERATOR_CACHE }, key = RedisCacheConstant.OPERATOR_KEY)
 	public List<Operator> findOperator(OperatorBean operatorBean) {
 		Operator record = new Operator();
 		BeanUtils.copyProperties(operatorBean, record);
@@ -73,12 +76,15 @@ public class OperatorService extends BaseService {
 		Assert.hasText(operatorBean.getClientId(), "客户端ID为空");
 		Assert.hasText(operatorBean.getClientSecret(), "客户端密钥为空");
 		Assert.hasText(operatorBean.getHostname(), "域名为空");
-		
+
 		Assert.hasText(operatorBean.getUsername(), "请填写用户名");
 		Assert.hasText(operatorBean.getPassword(), "请填写密码");
 
-		/*KongClientAPP oauth2 = kongService.oauth2(operatorBean.getClientId());
-		Assert.isTrue(oauth2 != null, "客户端非法");*/
+		/*
+		 * KongClientAPP oauth2 =
+		 * kongService.oauth2(operatorBean.getClientId()); Assert.isTrue(oauth2
+		 * != null, "客户端非法");
+		 */
 
 		Operator record = new Operator();
 		BeanUtils.copyProperties(operatorBean, record);
@@ -104,28 +110,28 @@ public class OperatorService extends BaseService {
 		// 通过kong服务获取授权信息
 		KongAuthorizeResponseBean authorizeResponseBean = kongService.authorize(authorize);
 		String redirectUri = authorizeResponseBean.getRedirectUri();
-		
+
 		String code = redirectUri.substring(redirectUri.indexOf("code=") + 5);
-		
+
 		KongOauth2TokenParamBean tokenParamBean = new KongOauth2TokenParamBean();
 		tokenParamBean.setHost(operatorBean.getHostname());
 		tokenParamBean.setClientId(operatorBean.getClientId());
 		tokenParamBean.setClientSecret(operatorBean.getClientSecret());
 		tokenParamBean.setGrantType("authorization_code");
 		tokenParamBean.setCode(code);
-		
+
 		TokenBean oauth2Token = kongService.oauth2Token(tokenParamBean);
 		Assert.hasText(oauth2Token.getAccessToken(), "获取token失败");
-		
+
 		ResponseBean<TokenBean> responseBean = new ResponseBean<>(ResultConstant.SUCCESS_CODE,
 				null, oauth2Token);
 		return responseBean;
 	}
-	
+
 	public String verifyCode(String phone) {
 		Assert.hasText(phone, "请填写手机号");
 		String key = RedisKeyConstant.USER_REGISTER_PRE + phone;
-		
+
 		String value = template.boundValueOps(key).get();
 		if (StringUtils.hasText(value)) {
 			throw new UserServiceException("验证码已发送");
@@ -133,7 +139,7 @@ public class OperatorService extends BaseService {
 		// 验证手机号是否合法
 
 		String random6bit = RandomUtils.getRandom6bit();
-		
+
 		template.boundValueOps(key).set(random6bit, 120, TimeUnit.SECONDS);
 		String content = String.format(userRegisterVerifyMsg, random6bit);
 		camelClientApiService.sendSMS(content, phone);
@@ -154,14 +160,14 @@ public class OperatorService extends BaseService {
 		Assert.hasText(key, "参数错误");
 		Assert.hasText(code, "请填写验证码");
 
-		/*String value = template.boundValueOps(key).get();
-		if (!StringUtils.hasText(value)) {
-			throw new UserServiceException("验证码错误");
-		}
-
-		if (!value.equalsIgnoreCase(code)) {
-			throw new UserServiceException("验证码错误");
-		}*/
+		/*
+		 * String value = template.boundValueOps(key).get(); if
+		 * (!StringUtils.hasText(value)) { throw new
+		 * UserServiceException("验证码错误"); }
+		 * 
+		 * if (!value.equalsIgnoreCase(code)) { throw new
+		 * UserServiceException("验证码错误"); }
+		 */
 		template.delete(key);
 	}
 
@@ -190,22 +196,23 @@ public class OperatorService extends BaseService {
 		return json.toString();
 
 	}
-	
+
 	public void nextId() throws InterruptedException {
-		
+
 		Operator record = new Operator();
 		record.setUsername("18301310622");
 		this.operatorMapper.insert(record);
-		
+
 		for (int i = 0; i < 1000; i++) {
 			try {
-				logger.info("nextLong {}", incrementerService.nextLongValue(IncrementerConstant.CUSTOMER_NO));
+				logger.info("nextLong {}",
+						incrementerService.nextLongValue(IncrementerConstant.CUSTOMER_NO));
 			} catch (DataAccessException e) {
 				i--;
 				logger.error(e.getMessage());
 			}
 		}
-		
+
 		Thread.sleep(999999);
 	}
 

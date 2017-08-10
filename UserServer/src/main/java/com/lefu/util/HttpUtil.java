@@ -1,9 +1,10 @@
 package com.lefu.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -15,7 +16,9 @@ import java.util.Set;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -24,6 +27,7 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -92,11 +96,19 @@ public class HttpUtil {
 	}
 
 	public static String post(String url) {
-		return post(url, null, null);
+		return httpRequest(url, HttpPost.METHOD_NAME, null, null);
+	}
+
+	public static String patch(String url) {
+		return httpRequest(url, HttpPatch.METHOD_NAME, null, null);
+	}
+
+	public static String patch(String url, Map<String, String> header, Map<String, String> param) {
+		return httpRequest(url, HttpPatch.METHOD_NAME, header, param);
 	}
 
 	public static String get(String url) {
-		return get(url, null, null);
+		return httpRequest(url, HttpGet.METHOD_NAME, null, null);
 	}
 
 	public static String get(String url, Map<String, String> header, Map<String, String> param) {
@@ -105,6 +117,65 @@ public class HttpUtil {
 
 	public static String post(String url, Map<String, String> header, Map<String, String> param) {
 		return httpRequest(url, HttpPost.METHOD_NAME, header, param);
+	}
+
+	public static String download(String url, String filepath) {
+		FileOutputStream fileout = null;
+		InputStream is = null;
+		try {
+			CloseableHttpClient httpclient = getHttpClient(url.startsWith(HTTPS));
+			HttpGet httpget = new HttpGet(url);
+			HttpResponse response = httpclient.execute(httpget);
+
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+
+			File file = new File(filepath, getFileName(response));
+
+			file.getParentFile().mkdirs();
+			fileout = new FileOutputStream(file);
+			/**
+			 * 根据实际运行效果 设置缓冲区大小
+			 */
+			byte[] buffer = new byte[10 * 1024];
+			int ch = 0;
+			while ((ch = is.read(buffer)) != -1) {
+				fileout.write(buffer, 0, ch);
+			}
+			is.close();
+			fileout.flush();
+			fileout.close();
+			logger.info("{}下载完成", url);
+		} catch (Exception e) {
+			logger.error("{}下载失败", url);
+		} finally {
+			IOUtils.closeQuietly(is);
+			IOUtils.closeQuietly(fileout);
+		}
+		return null;
+	}
+
+	public static String getFileName(HttpResponse response) {
+		Header contentHeader = response.getFirstHeader("Content-Disposition");
+		String filename = null;
+		if (contentHeader != null) {
+			HeaderElement[] values = contentHeader.getElements();
+			if (values.length == 1) {
+				NameValuePair param = values[0].getParameterByName("filename");
+				if (param != null) {
+					try {
+						// filename = new
+						// String(param.getValue().toString().getBytes(),
+						// "utf-8");
+						// filename=URLDecoder.decode(param.getValue(),"utf-8");
+						filename = param.getValue();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return filename;
 	}
 
 	public static String httpRequest(String url, String methodName, Map<String, String> header,
@@ -131,11 +202,13 @@ public class HttpUtil {
 
 			RequestBuilder requestBuilder = null;
 			if (HttpGet.METHOD_NAME.equals(methodName)) {
-				requestBuilder = RequestBuilder.get();
+				requestBuilder = RequestBuilder.get(url);
 			} else if (HttpPost.METHOD_NAME.equals(methodName)) {
-				requestBuilder = RequestBuilder.post();
+				requestBuilder = RequestBuilder.post(url);
+			} else if (HttpPatch.METHOD_NAME.equals(methodName)) {
+				requestBuilder = RequestBuilder.patch(url);
 			} else {
-				requestBuilder = RequestBuilder.get();
+				requestBuilder = RequestBuilder.get(url);
 			}
 
 			if (!CollectionUtils.isEmpty(header)) {
@@ -154,13 +227,7 @@ public class HttpUtil {
 					list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 				}
 			}
-			
-			try {
-				requestBuilder.setUri(new URI(url));
-			} catch (URISyntaxException e) {
-				throw new HttpException(e.getMessage(), e);
-			}
-			
+
 			try {
 				requestBuilder.setEntity(new UrlEncodedFormEntity(list, UTF_8));
 			} catch (UnsupportedEncodingException e) {

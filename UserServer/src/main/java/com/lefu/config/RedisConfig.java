@@ -10,6 +10,7 @@ import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 
@@ -95,6 +96,13 @@ public class RedisConfig {
 		StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
 		stringRedisTemplate.setConnectionFactory(connectionFactory);
 		return stringRedisTemplate;
+	}
+
+	@Bean
+	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+		RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<Object, Object>();
+		redisTemplate.setConnectionFactory(connectionFactory);
+		return redisTemplate;
 	}
 
 }

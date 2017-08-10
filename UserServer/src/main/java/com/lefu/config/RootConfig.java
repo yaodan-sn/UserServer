@@ -15,7 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableAspectJAutoProxy
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "com.lefu.config", "com.lefu.aop", "com.lefu.**.service" }, excludeFilters = @ComponentScan.Filter(classes = Controller.class))
+@ComponentScan(basePackages = { "com.lefu.config", "com.lefu.aop", "com.lefu.**.service",
+		"com.lefu.user.task" }, excludeFilters = @ComponentScan.Filter(classes = Controller.class))
 @PropertySource({ "classpath:system.properties", "classpath:sms.properties" })
 public class RootConfig {
 
