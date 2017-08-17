@@ -7,8 +7,4 @@
 
 	<dubbo:consumer connections="3" />
 
-	<dubbo:reference id="customerInterface" interface="com.pay.cust.dubbo.CustomerInterface" group="cust" version="1.0.0" check="false" retries="0" timeout="20000"></dubbo:reference>
-	<dubbo:reference id="enterpriseQualificationAuditInterface" interface="com.pay.enterprise.dubbo.EnterpriseQualificationAuditInterface" group="cust" version="1.0.0" check="false" retries="0" timeout="20000"></dubbo:reference>
-	
-
 </beans>
